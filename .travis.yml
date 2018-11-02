@@ -14,7 +14,7 @@ after_success:
   - docker build -t andiausrust/multi-server ./server
   - docker build -t andiausrust/multi-worker ./worker
 
-  - echo "$DOCKER_PASSWORD" | docker login -u "DOCKER_ID" --password-stdin
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   - docker push andiausrust/multi-client
   - docker push andiausrust/multi-nginx
   - docker push andiausrust/multi-server
