@@ -1,0 +1,21 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker -build -t andiausrust/react-test -f ./client/Dockerfile.dev ./cient/Dockerfile.dev ./client
+
+script:
+  - docker run andiausrust/react-test npm test -- -- coverage
+
+after_success:
+  - docker build -t andiausrust/multi-client ./client
+  - docker build -t andiausrust/multi-nginx ./nginx
+  - docker build -t andiausrust/multi-server ./server
+  - docker build -t andiausrust/multi-worker ./worker
+
+  - echo "$DOCKER_PASSWORD" | docker login -u "DOCKER_ID" --password-stdin
+  - docker push andiausrust/multi-client
+  - docker push andiausrust/multi-nginx
+  - docker push andiausrust/multi-server
+  - docker push andiausrust/multi-worker
